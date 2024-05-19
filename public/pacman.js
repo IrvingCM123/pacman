@@ -5,8 +5,8 @@ class Pacman {
         this.width = width;
         this.height = height;
         this.speed = speed;
-        this.direction = 4;
-        this.nextDirection = 4;
+        this.direction = DIRECTION_RIGHT;
+        this.nextDirection = DIRECTION_RIGHT;
         this.frameCount = 7;
         this.currentFrame = 1;
         setInterval(() => {
@@ -45,16 +45,16 @@ class Pacman {
 
     moveBackwards() {
         switch (this.direction) {
-            case DIRECTION_RIGHT: // Right
+            case DIRECTION_RIGHT:
                 this.x -= this.speed;
                 break;
-            case DIRECTION_UP: // Up
+            case DIRECTION_UP:
                 this.y += this.speed;
                 break;
-            case DIRECTION_LEFT: // Left
+            case DIRECTION_LEFT:
                 this.x += this.speed;
                 break;
-            case DIRECTION_BOTTOM: // Bottom
+            case DIRECTION_BOTTOM:
                 this.y -= this.speed;
                 break;
         }
@@ -62,16 +62,16 @@ class Pacman {
 
     moveForwards() {
         switch (this.direction) {
-            case DIRECTION_RIGHT: // Right
+            case DIRECTION_RIGHT:
                 this.x += this.speed;
                 break;
-            case DIRECTION_UP: // Up
+            case DIRECTION_UP:
                 this.y -= this.speed;
                 break;
-            case DIRECTION_LEFT: // Left
+            case DIRECTION_LEFT:
                 this.x -= this.speed;
                 break;
-            case DIRECTION_BOTTOM: // Bottom
+            case DIRECTION_BOTTOM:
                 this.y += this.speed;
                 break;
         }
@@ -80,18 +80,10 @@ class Pacman {
     checkCollisions() {
         let isCollided = false;
         if (
-            map[parseInt(this.y / oneBlockSize)][
-            parseInt(this.x / oneBlockSize)
-            ] == 1 ||
-            map[parseInt(this.y / oneBlockSize + 0.9999)][
-            parseInt(this.x / oneBlockSize)
-            ] == 1 ||
-            map[parseInt(this.y / oneBlockSize)][
-            parseInt(this.x / oneBlockSize + 0.9999)
-            ] == 1 ||
-            map[parseInt(this.y / oneBlockSize + 0.9999)][
-            parseInt(this.x / oneBlockSize + 0.9999)
-            ] == 1
+            map[parseInt(this.y / oneBlockSize)][parseInt(this.x / oneBlockSize)] == 1 ||
+            map[parseInt(this.y / oneBlockSize + 0.9999)][parseInt(this.x / oneBlockSize)] == 1 ||
+            map[parseInt(this.y / oneBlockSize)][parseInt(this.x / oneBlockSize + 0.9999)] == 1 ||
+            map[parseInt(this.y / oneBlockSize + 0.9999)][parseInt(this.x / oneBlockSize + 0.9999)] == 1
         ) {
             isCollided = true;
         }
@@ -131,7 +123,6 @@ class Pacman {
 
     getMapY() {
         let mapY = parseInt(this.y / oneBlockSize);
-
         return mapY;
     }
 
@@ -175,3 +166,4 @@ class Pacman {
         canvasContext.restore();
     }
 }
+

@@ -44,6 +44,12 @@ let generateRandomMap = () => {
             }
         }
     }
+    // Clear area around initial Pacman position (1, 1)
+    map[1][1] = 2;
+    map[1][2] = 2;
+    map[2][1] = 2;
+    map[2][2] = 2;
+
     return map;
 };
 
