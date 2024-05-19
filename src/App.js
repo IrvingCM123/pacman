@@ -26,6 +26,10 @@ function App() {
     };
   }, []);
 
+  const resetGame = () => {
+    window.resetGame();
+  };
+
   return (
     <div id="container">
       <canvas id="canvas" width="430" height="500"></canvas>
@@ -33,6 +37,9 @@ function App() {
         <img id="animation" src="/img/animations.gif" width="140" height="20" alt="animation" />
         <img id="ghosts" src="/img/ghost.png" width="140" height="20" alt="ghosts" />
       </div>
+      <button onClick={resetGame} style={{ position: 'absolute', top: '10px', right: '10px' }}>
+        Reiniciar Juego
+      </button>
     </div>
   );
 }
