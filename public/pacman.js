@@ -9,6 +9,7 @@ class Pacman {
         this.nextDirection = DIRECTION_RIGHT;
         this.frameCount = 7;
         this.currentFrame = 1;
+        this.movements = [];
         setInterval(() => {
             this.changeAnimation();
         }, 100);
@@ -26,7 +27,36 @@ class Pacman {
         } else if (this.x < 0) {
             this.x = canvas.width - this.width;
         }
+
+        //this.logMovement();
+        //this.sendMovementsToAPI();
     }
+
+    //logMovement() {
+    //    this.movements.push({
+    //        x: this.x,
+    //        y: this.y,
+    //        direction: this.direction
+    //    });
+    //}
+//
+    //async sendMovementsToAPI() {
+    //    if (this.movements.length >= 10) {
+    //        console.log('Sending movements to API:', this.movements);
+    //        try {
+    //            await fetch('http://localhost:5000/train', {
+    //                method: 'POST',
+    //                headers: {
+    //                    'Content-Type': 'application/json'
+    //                },
+    //                body: JSON.stringify(this.movements)
+    //            });
+    //            this.movements = []; // Clear the array after sending
+    //        } catch (error) {
+    //            console.error('');
+    //        }
+    //    }
+    //}
 
     eat() {
         for (let i = 0; i < map.length; i++) {

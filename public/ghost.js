@@ -502,7 +502,7 @@ let createGhosts = () => {
         10 * oneBlockSize,
         oneBlockSize,
         oneBlockSize,
-        pacman.speed,
+        pacman.speed/2,
         ghostImageLocations[2].x,
         ghostImageLocations[2].y,
         124,
@@ -534,3 +534,45 @@ let drawGhosts = () => {
         ghosts[i].draw();
     }
 };
+
+class LearningGhost extends Ghost {
+    async moveProcess() {
+        if (this.isInRange()) {
+            const nextMove = await this.predictPacmanMove();
+            this.target = { x: nextMove.x, y: nextMove.y };
+        } else {
+            this.target = randomTargetsForGhosts[this.randomTargetIndex];
+        }
+        this.changeDirectionIfPossible();
+        this.moveForwards();
+        if (this.checkCollisions()) {
+            this.moveBackwards();
+        }
+    }
+
+    async predictPacmanMove() {
+        try {
+            const response = await fetch('http://localhost:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    x: pacman.x,
+                    y: pacman.y,
+                    direction: pacman.direction
+                })
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            console.log('Predicted Pacman move:', data);
+            return data.next_move;
+        } catch (error) {
+            console.error('Error predicting Pacman move:', error);
+            return { x: this.getMapX(), y: this.getMapY() }; // Default to current position
+        }
+    }
+}
+
