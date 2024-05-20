@@ -40,18 +40,74 @@ let generateRandomMap = () => {
             if (i === 0 || i === rows - 1 || j === 0 || j === cols - 1) {
                 map[i].push(1); // Borders
             } else {
-                map[i].push(Math.random() < 0.2 ? 1 : 2); // Random walls and food
+                map[i].push(Math.random() < 0.4 ? 1 : 2); // Random walls and food
             }
         }
     }
+
     // Clear area around initial Pacman position (1, 1)
     map[1][1] = 2;
     map[1][2] = 2;
     map[2][1] = 2;
     map[2][2] = 2;
 
+    // Ensure paths for ghosts and Pacman
+    for (let i = 1; i < rows - 1; i += 4) {
+        for (let j = 1; j < cols - 1; j += 4) {
+            map[i][j] = 2;
+        }
+    }
+
+    // Ensure horizontal paths
+    for (let i = 2; i < rows - 2; i += 6) {
+        for (let j = 1; j < cols - 1; j++) {
+            map[i][j] = 2;
+        }
+    }
+
+    // Ensure vertical paths
+    for (let j = 2; j < cols - 2; j += 6) {
+        for (let i = 1; i < rows - 1; i++) {
+            map[i][j] = 2;
+        }
+    }
+
+    // Avoid 2x2 closed wall squares
+    for (let i = 1; i < rows - 1; i++) {
+        for (let j = 1; j < cols - 1; j++) {
+            if (map[i][j] == 1 && map[i][j + 1] == 1 && map[i + 1][j] == 1 && map[i + 1][j + 1] == 1) {
+                map[i][j] = 2; // Remove one wall to avoid closed square
+            }
+        }
+    }
+
+    // Avoid more than 3 contiguous walls
+    for (let i = 1; i < rows - 1; i++) {
+        for (let j = 1; j < cols - 1; j++) {
+            if (map[i][j] == 1) {
+                let contiguousWalls = 0;
+
+                // Check right
+                if (j < cols - 2 && map[i][j + 1] == 1) contiguousWalls++;
+                // Check down
+                if (i < rows - 2 && map[i + 1][j] == 1) contiguousWalls++;
+                // Check left
+                if (j > 1 && map[i][j - 1] == 1) contiguousWalls++;
+                // Check up
+                if (i > 1 && map[i - 1][j] == 1) contiguousWalls++;
+
+                if (contiguousWalls >= 3) {
+                    map[i][j] = 2; // Remove wall to avoid forming a closed space
+                }
+            }
+        }
+    }
+
     return map;
 };
+
+
+
 
 let map = generateRandomMap();
 
@@ -136,17 +192,41 @@ let drawFoods = () => {
     for (let i = 0; i < map.length; i++) {
         for (let j = 0; j < map[0].length; j++) {
             if (map[i][j] == 2) {
-                createRect(
-                    j * oneBlockSize + oneBlockSize / 3,
-                    i * oneBlockSize + oneBlockSize / 3,
-                    oneBlockSize / 3,
-                    oneBlockSize / 3,
-                    "#FEB897"
-                );
+                if (!isEnclosed(i, j)) {
+                    createRect(
+                        j * oneBlockSize + oneBlockSize / 3,
+                        i * oneBlockSize + oneBlockSize / 3,
+                        oneBlockSize / 3,
+                        oneBlockSize / 3,
+                        "#FEB897"
+                    );
+                }
             }
         }
     }
 };
+
+let isEnclosed = (i, j) => {
+    let wallsCount = 0;
+    const directions = [
+        [-1, 0], [1, 0], [0, -1], [0, 1]
+    ];
+
+    for (let k = 0; k < directions.length; k++) {
+        const newRow = i + directions[k][0];
+        const newCol = j + directions[k][1];
+
+        if (newRow >= 0 && newRow < map.length && newCol >= 0 && newCol < map[0].length) {
+            if (map[newRow][newCol] == 1) {
+                wallsCount++;
+            }
+        }
+    }
+
+    return wallsCount === 4;
+};
+
+
 
 let drawRemainingLives = () => {
     canvasContext.font = "20px Emulogic";
@@ -241,25 +321,6 @@ let drawWalls = () => {
                 }
             }
         }
-    }
-};
-
-let createGhosts = () => {
-    ghosts = [];
-    for (let i = 0; i < ghostCount; i++) {
-        let newGhost = new Ghost(
-            9 * oneBlockSize + (i % 2 == 0 ? 0 : 1) * oneBlockSize,
-            10 * oneBlockSize + (i % 2 == 0 ? 0 : 1) * oneBlockSize,
-            oneBlockSize,
-            oneBlockSize,
-            pacman.speed / 2,
-            ghostImageLocations[i % 4].x,
-            ghostImageLocations[i % 4].y,
-            124,
-            116,
-            6 + i
-        );
-        ghosts.push(newGhost);
     }
 };
 

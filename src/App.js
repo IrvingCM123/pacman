@@ -38,7 +38,7 @@ function App() {
         <img id="ghosts" src="/img/ghost.png" width="140" height="20" alt="ghosts" />
       </div>
       <button onClick={resetGame} style={{ position: 'absolute', top: '10px', right: '10px' }}>
-        Reiniciar Juego
+        Reiniciar Juego 
       </button>
     </div>
   );
