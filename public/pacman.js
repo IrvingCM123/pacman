@@ -69,6 +69,15 @@ class Pacman {
         }
     }
 
+    moveForwards() {
+        switch (this.direction) {
+            case DIRECTION_RIGHT: this.x += this.speed; break;
+            case DIRECTION_UP: this.y -= this.speed; break;
+            case DIRECTION_LEFT: this.x -= this.speed; break;
+            case DIRECTION_BOTTOM: this.y += this.speed; break;
+        }
+    }
+
     moveBackwards() {
         switch (this.direction) {
             case DIRECTION_RIGHT: this.x -= this.speed; break;
@@ -78,13 +87,9 @@ class Pacman {
         }
     }
 
-    moveForwards() {
-        switch (this.direction) {
-            case DIRECTION_RIGHT: this.x += this.speed; break;
-            case DIRECTION_UP: this.y -= this.speed; break;
-            case DIRECTION_LEFT: this.x -= this.speed; break;
-            case DIRECTION_BOTTOM: this.y += this.speed; break;
-        }
+    alignToBlock() {
+        this.x = Math.round(this.x / oneBlockSize) * oneBlockSize;
+        this.y = Math.round(this.y / oneBlockSize) * oneBlockSize;
     }
 
     checkCollisions() {

@@ -80,38 +80,27 @@ class Ghost {
         }
     }
 
-    moveBackwards() {
+    moveForwards() {
         switch (this.direction) {
-            case 4:
-                this.x -= this.speed;
-                break; // Right
-            case 3:
-                this.y += this.speed;
-                break; // Up
-            case 2:
-                this.x += this.speed;
-                break; // Left
-            case 1:
-                this.y -= this.speed;
-                break; // Down
+            case 4: this.x += this.speed; break; // Right
+            case 3: this.y -= this.speed; break; // Up
+            case 2: this.x -= this.speed; break; // Left
+            case 1: this.y += this.speed; break; // Down
         }
     }
 
-    moveForwards() {
+    moveBackwards() {
         switch (this.direction) {
-            case 4:
-                this.x += this.speed;
-                break; // Right
-            case 3:
-                this.y -= this.speed;
-                break; // Up
-            case 2:
-                this.x -= this.speed;
-                break; // Left
-            case 1:
-                this.y += this.speed;
-                break; // Down
+            case 4: this.x -= this.speed; break; // Right
+            case 3: this.y += this.speed; break; // Up
+            case 2: this.x += this.speed; break; // Left
+            case 1: this.y -= this.speed; break; // Down
         }
+    }
+
+    alignToBlock() {
+        this.x = Math.round(this.x / oneBlockSize) * oneBlockSize;
+        this.y = Math.round(this.y / oneBlockSize) * oneBlockSize;
     }
 
     checkCollisions() {
@@ -472,8 +461,8 @@ let createGhosts = () => {
     ghosts = [];
     let pos = findValidGhostPosition();
     ghosts.push(new AmbushGhost(
-        9 * oneBlockSize,
-        10 * oneBlockSize,
+        pos.x,
+        pos.y,
         oneBlockSize,
         oneBlockSize,
         pacman.speed / 2,
@@ -485,8 +474,8 @@ let createGhosts = () => {
     ));
 
     ghosts.push(new ProximityGhost(
-        9 * oneBlockSize,
-        10 * oneBlockSize,
+        pos.x,
+        pos.y,
         oneBlockSize,
         oneBlockSize,
         pacman.speed / 2,
@@ -498,8 +487,8 @@ let createGhosts = () => {
     ));
 
     ghosts.push(new IgnoreGhost(
-        9 * oneBlockSize,
-        10 * oneBlockSize,
+        pos.x,
+        pos.y,
         oneBlockSize,
         oneBlockSize,
         pacman.speed/2,
@@ -510,8 +499,8 @@ let createGhosts = () => {
         6
     ));
     ghosts.push(new BlockGhost(
-        9 * oneBlockSize,
-        10 * oneBlockSize,
+        pos.x,
+        pos.y,
         oneBlockSize,
         oneBlockSize,
         pacman.speed / 2,
